@@ -36,13 +36,16 @@ with st.expander("See cleaned data"):
 
 # Distribution of sleep together vs separately
 st.title("Let's see how many couples sleep together")
-demo_df['Together?'] = demo_df['sleep together?'].map({0: 'NO', 1:'YES'})
+demo_df['Sleep Together?'] = demo_df['sleep together?'].map({0: 'NO', 1:'YES'})
 
-sleep_together = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
-    alt.X('Together?:N', sort='-y', axis=alt.Axis(title='Do couples sleep together?')),
-    alt.Y('count()')
+sleep_together = alt.Chart(demo_df).mark_bar(tooltip = True, size = 70).encode(
+    alt.X('count()'),
+    alt.Y('Sleep Together?:N', sort='-x', axis=alt.Axis(title='Do couples sleep together?')),
+    alt.Color('Sleep Together?', scale=alt.Scale(
+            domain=['YES', 'NO'],
+            range=['pink', 'lightblue']))
 ).interactive(
-).properties(width=600)
+).properties(width=600, height=300)
 st.write(sleep_together)
 
 # brushes
@@ -60,10 +63,10 @@ st.title('How the relationships status look like')
 status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('CurrentRelationshipStatus', sort = '-x'), 
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -72,10 +75,10 @@ st.write(status_chart)
 length_chart = alt.Chart(demo_df, title='Relationship Length').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('RelationshipLength', sort = '-x'),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -84,10 +87,10 @@ st.write(length_chart)
 freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Frequency in separate beds', sort = ['Never', 'Once a year or less', 'Once a month or less', 'A few times per month', 'A few times per week', 'Every night']),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
         scale=alt.Scale(
         domain=['YES', 'NO'],
-        range=['pink', 'steelblue']))
+        range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -98,10 +101,10 @@ st.write(freq_chart)
 age_chart = alt.Chart(demo_df, title='Age').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Age', sort = ['18-29', '30-44', '45-60', '> 60', 'Did not disclose']),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
         scale=alt.Scale(
         domain=['YES', 'NO'],
-        range=['pink', 'steelblue']))
+        range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -109,10 +112,10 @@ age_chart = alt.Chart(demo_df, title='Age').mark_bar(tooltip = True).encode(
 gender_chart = alt.Chart(demo_df, title='Gender').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Gender', sort = '-x'),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -120,20 +123,20 @@ gender_chart = alt.Chart(demo_df, title='Gender').mark_bar(tooltip = True).encod
 income_chart = alt.Chart(demo_df, title='Household Income').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Household income', sort = ['$150,000+', '$100,000 - $149,999', '$50,000 - $99,999', '$25,000 - $49,999', '$0 - $24,999', 'Did not disclose']),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
 education_chart = alt.Chart(demo_df, title='Education Level').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Education', sort = ['Graduate degree', 'Bachelor degree', 'Some college or Associate degree', 'High school degree', 'Less than high school degree', 'Did not disclose']),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
@@ -141,10 +144,10 @@ education_chart = alt.Chart(demo_df, title='Education Level').mark_bar(tooltip =
 location_chart = alt.Chart(demo_df, title='Location').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Location', sort = '-x'),
-    color=alt.Color('Together?',
+    color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'steelblue']))
+            range=['pink', 'lightblue']))
 ).properties(
     width = 600
 )
