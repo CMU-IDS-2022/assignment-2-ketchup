@@ -8,28 +8,31 @@ st.title("How many couples sleep in separate beds?👩‍❤️‍👨 👩‍�
 def load_data(url, encode = 'utf-8'):
     return pd.read_csv(url, encoding = encode, index_col=0)
 
-#url_raw = 'https://github.com/fivethirtyeight/data/blob/22a478af3edc00f69693c3f5f4604b2f1fd024b0/sleeping-alone-data/sleeping-alone-data.csv'
+url_raw = 'https://raw.githubusercontent.com/fivethirtyeight/data/22a478af3edc00f69693c3f5f4604b2f1fd024b0/sleeping-alone-data/sleeping-alone-data.csv'
 url_separate = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/sleep_separately.csv'
 url_together = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/sleep_together.csv'
 url_demo = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/demographic_data.csv'
 
 # READ DATA
-#raw = load_data(url_raw, encode ='ISO-8859-1')
+raw = load_data(url_raw, encode ='ISO-8859-1')
 demo_df = load_data(url_demo)
 separate_df = load_data(url_separate)
 together_df = load_data(url_together)
 
-st.write("Do you want to see raw data?")
-# Checkbox
-if st.checkbox("YES"):
-    #st.write(raw)
-    st.write("Here are the data")
+with st.expander("See raw data"):
+    st.text('Here are the raw data')
+    st.write(raw)
+
+with st.expander("See cleaned data"):
+    st.write("Here are the cleaned data")
     st.text("Demographic data:")
     st.write(demo_df)
     st.text("Data of couples who sleep separately:")
     st.write(separate_df)
     st.text("Data of couples who sleep together:")
     st.write(together_df)
+
+
 
 # Distribution of sleep together vs separately
 st.title("Let's see how many couples sleep together")
@@ -52,6 +55,7 @@ income_brush = alt.selection_multi(fields=['Household income'])
 education_brush = alt.selection_multi(fields=['Education'])
 location_brush = alt.selection_multi(fields=['Location'])
 
+# Relationship status
 st.title('How the relationships status look like')
 status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
@@ -89,6 +93,8 @@ freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(too
 )
 st.write(freq_chart)
 
+
+# Demographic data
 age_chart = alt.Chart(demo_df, title='Age').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Age', sort = ['18-29', '30-44', '45-60', '> 60', 'Did not disclose']),
@@ -143,6 +149,7 @@ location_chart = alt.Chart(demo_df, title='Location').mark_bar(tooltip = True).e
     width = 600
 )
 
+# Drop down list for user to select demographic features
 options = st.multiselect(
      'What demographic feature distribution do you want to see?',
      ['Age', 'Gender', 'Household Income', 'Education', 'Location'])
@@ -158,6 +165,11 @@ if 'Household Income' in options:
     st.write(income_chart)
 if 'Location' in options:
     st.write(location_chart)
+
+
+
+
+
 
 
 
