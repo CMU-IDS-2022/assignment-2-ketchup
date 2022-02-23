@@ -51,9 +51,9 @@ with st.expander("See cleaned data"):
 st.header("Part 1: Sleep Together or Not?")
 st.write("We have 1079 valid responses. Let's look at how many couples actually sleep together every day.")
 
-demo_df['Sleep Together?'] = demo_df['sleep together?'].map({0: 'NO', 1:'YES'})
+demo_df['Sleep Together?'] = demo_df['Sleep Together?'].map({0: 'NO', 1:'YES'})
 sleep_together = alt.Chart(demo_df, title='Do you and your partner sleep together every day?').mark_bar(tooltip = True, size = 30).encode(
-    alt.X('count()', axis=alt.Axis(title='')),
+    alt.X('count()'),
     alt.Y('Sleep Together?:N', sort='-x', axis=alt.Axis(title='')),
     alt.Color('Sleep Together?', scale=alt.Scale(
             domain=['YES', 'NO'],
@@ -68,11 +68,11 @@ st.write("Now, you may wonder, among those who don't always sleep with their par
 
 # Sleep together or not?
 group = st.radio("👇 Select one of the demographics you want to look at",
-     ('Relationship Status', 'Relationship Length'))
+     ('Relationship Length', 'Relationship Status',))
 
 # Relationship status
 status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip = True).encode(
-    x = alt.X('count()', axis=alt.Axis(title='')),
+    x = alt.X('count()'),
     y = alt.Y('CurrentRelationshipStatus', sort = '-x', axis=alt.Axis(title='')), 
     color=alt.Color('Sleep Together?',
             scale=alt.Scale(
@@ -83,7 +83,7 @@ status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip 
 # Timespan of current relationship
 categories_in_order = ["More than 20 years", "16-20 years", "11-15 years", "6-10 years", "1-5 years", "Less than 1 year"]
 length_chart = alt.Chart(demo_df, title='Relationship Length').mark_bar(tooltip = True).encode(
-    x = alt.X('count()', axis=alt.Axis(title='')),
+    x = alt.X('count()'),
     y = alt.Y('RelationshipLength', sort = categories_in_order, axis=alt.Axis(title='')),
     color=alt.Color('Sleep Together?',
             scale=alt.Scale(
@@ -91,10 +91,10 @@ length_chart = alt.Chart(demo_df, title='Relationship Length').mark_bar(tooltip 
             range=['pink', 'lightblue']))
 ).properties(width = 600)
 
-if group == 'Relationship Status':
-     st.write(status_chart)
-else:
+if group == 'Relationship Length':
      st.write(length_chart)
+else:
+     st.write(status_chart)
 
 # freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
 #     x = alt.X('count()'),
@@ -278,12 +278,12 @@ with col[1]:
 
 
 
+st.markdown("---")
+st.markdown("This project was created by Erin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
 
-st.markdown("This project was created by Li-Hsin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
 
 
-
-# brushes
+# Brushes
 sleep_together_brush = alt.selection_multi(fields=['sleep together?'])
 status_brush = alt.selection_multi(fields=['CurrentRelationshipStatus'])
 length_brush = alt.selection_multi(fields=['RelationshipLength'])
