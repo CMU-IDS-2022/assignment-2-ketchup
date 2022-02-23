@@ -52,6 +52,7 @@ income_brush = alt.selection_multi(fields=['Household income'])
 education_brush = alt.selection_multi(fields=['Education'])
 location_brush = alt.selection_multi(fields=['Location'])
 
+st.title('How the relationships status look like')
 status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('CurrentRelationshipStatus', sort = '-x'), 
@@ -98,7 +99,6 @@ age_chart = alt.Chart(demo_df, title='Age').mark_bar(tooltip = True).encode(
 ).properties(
     width = 600
 )
-st.write(age_chart)
 
 gender_chart = alt.Chart(demo_df, title='Gender').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
@@ -110,7 +110,6 @@ gender_chart = alt.Chart(demo_df, title='Gender').mark_bar(tooltip = True).encod
 ).properties(
     width = 600
 )
-st.write(gender_chart)
 
 income_chart = alt.Chart(demo_df, title='Household Income').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
@@ -122,8 +121,6 @@ income_chart = alt.Chart(demo_df, title='Household Income').mark_bar(tooltip = T
 ).properties(
     width = 600
 )
-st.write(income_chart)
-
 education_chart = alt.Chart(demo_df, title='Education Level').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Education', sort = ['Graduate degree', 'Bachelor degree', 'Some college or Associate degree', 'High school degree', 'Less than high school degree', 'Did not disclose']),
@@ -134,7 +131,6 @@ education_chart = alt.Chart(demo_df, title='Education Level').mark_bar(tooltip =
 ).properties(
     width = 600
 )
-st.write(education_chart)
 
 location_chart = alt.Chart(demo_df, title='Location').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
@@ -146,20 +142,22 @@ location_chart = alt.Chart(demo_df, title='Location').mark_bar(tooltip = True).e
 ).properties(
     width = 600
 )
-st.write(location_chart)
 
-# chart = alt.Chart(df).mark_point().encode(
-#     x=alt.X("body_mass_g", scale=alt.Scale(zero=False)),
-#     y=alt.Y("flipper_length_mm", scale=alt.Scale(zero=False)),
-#     color=alt.Y("species")
-# ).properties(
-#     width=600, height=400
-# ).interactive()
-
-# st.write(chart)
-
-
-
+options = st.multiselect(
+     'What demographic feature distribution do you want to see?',
+     ['Age', 'Gender', 'Household Income', 'Education', 'Location'])
+if 'Age' in options:
+    st.write(age_chart)
+if 'Gender' in options:
+    st.write(gender_chart)
+if 'Education' in options:
+    st.write(education_chart)
+if 'Location' in options:
+    st.write(location_chart)
+if 'Household Income' in options:
+    st.write(income_chart)
+if 'Location' in options:
+    st.write(location_chart)
 
 
 
