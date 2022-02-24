@@ -1,3 +1,4 @@
+from os import sep
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -74,10 +75,11 @@ group = st.radio("👇 Select one of the demographics you want to look at",
 status_chart = alt.Chart(demo_df, title='Relationship Status').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('CurrentRelationshipStatus', sort = '-x', axis=alt.Axis(title='')), 
-    color=alt.Color('Sleep Together?',
+    color=alt.Color('Sleep Together?', legend = None,
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'lightblue']))
+            range=['pink', 'lightblue'])),
+    row = 'Sleep Together?'
 ).properties(width = 600)
     
 # Timespan of current relationship
@@ -85,10 +87,12 @@ categories_in_order = ["More than 20 years", "16-20 years", "11-15 years", "6-10
 length_chart = alt.Chart(demo_df, title='Relationship Length').mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('RelationshipLength', sort = categories_in_order, axis=alt.Axis(title='')),
-    color=alt.Color('Sleep Together?',
+    color = alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'lightblue']))
+            range=['pink', 'lightblue']),
+            legend = None),
+    row = 'Sleep Together?'
 ).properties(width = 600)
 
 if group == 'Relationship Length':
@@ -118,48 +122,55 @@ st.write("""The survey collected demographic data of the respondents, including 
 st.write("The demographic distributions can help us better understand the correlation between **demographics** and **whether the couple sleep together**.")
 
 # Demographic data
-age_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
+age_chart = alt.Chart(demo_df, title="Distribution of age vs sleep together or not").mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Age', sort = ['> 60', '45-60', '30-44', '18-29', 'Did not disclose']),
-    color=alt.Color('Sleep Together?',
-        scale=alt.Scale(
-        domain=['YES', 'NO'],
-        range=['pink', 'lightblue']))
+    color = alt.Color('Sleep Together?', 
+                scale = alt.Scale(domain=['YES', 'NO'], 
+                range=['pink', 'lightblue']), 
+                legend=None),
+    row = 'Sleep Together?'
 ).properties(
     width = 600
 )
 
-gender_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
+gender_chart = alt.Chart(demo_df, title="Distribution of gender vs sleep together or not").mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Gender', sort = '-x'),
     color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'lightblue']))
+            range=['pink', 'lightblue']),
+            legend = None),
+    row = 'Sleep Together?'
 ).properties(
     width = 600
 )
 
-income_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
+income_chart = alt.Chart(demo_df, title="Distribution of household income vs sleep together or not").mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Household income', sort = ['$150,000+', '$100,000 - $149,999', '$50,000 - $99,999', '$25,000 - $49,999', '$0 - $24,999', 'Did not disclose']),
     color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'lightblue']))
+            range=['pink', 'lightblue']),
+            legend = None),
+        row = 'Sleep Together?'
 ).properties(
     width = 600
 )
     
-education_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
+education_chart = alt.Chart(demo_df, title="Distribution of education level vs sleep together or not").mark_bar(tooltip = True).encode(
     x = alt.X('count()'),
     y = alt.Y('Education', sort = ['Graduate degree', 'Bachelor degree', 'Some college or Associate degree', 'High school degree', 'Less than high school degree', 'Did not disclose']),
     color=alt.Color('Sleep Together?',
             scale=alt.Scale(
             domain=['YES', 'NO'],
-            range=['pink', 'lightblue']))
+            range=['pink', 'lightblue']),
+            legend = None),
+    row = 'Sleep Together?'
 ).properties(
-    width = 600
+    width = 500
 )
 
 # location_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
@@ -179,12 +190,16 @@ demo_options = st.multiselect(
      ['Age', 'Gender', 'Household Income', 'Education'])
 if 'Age' in demo_options:
     st.write(age_chart)
+    st.markdown("---")
 if 'Gender' in demo_options:
     st.write(gender_chart)
+    st.markdown("---")
 if 'Education' in demo_options:
     st.write(education_chart)
+    st.markdown("---")
 if 'Household Income' in demo_options:
     st.write(income_chart)
+    st.markdown("---")
 #if 'Location' in demo_options:
 #    st.write(location_chart)
     
@@ -216,67 +231,53 @@ separate_reasons =['Reason_One of us snores',
 questions = ['Sleeping in separate beds helps us to stay together', 'We sleep better when we sleep in separate beds',
              'Our sex life has improved as a result of sleeping in separate beds' ]
 
-reason_options = st.radio(
+reason_option = st.selectbox(
     "👇 Select the reason you want to see",
     ['One of us snores','One of us makes frequent bathroom trips in the night',
     'One of us is sick','We are no longer physically intimate',
     'We have different temperature preferences for the room',
     'We have had an argument or fight','Not enough space',
     'Do not want to share the covers','One of us needs to sleep with a child',
-    'Night working/very different sleeping times']
+    'Night working/very different sleeping times'])
+
+question_option = st.selectbox(
+    "👇 Select the question you want to see",
+    ['Sleeping in separate beds helps us to stay together', 'We sleep better when we sleep in separate beds',
+    'Our sex life has improved as a result of sleeping in separate beds' ]
 )
 
+st.write("---")
+st.subheader('If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?')
 
-col = st.columns(2)
-selected = alt.selection_single(empty="none")
-with col[0]:
-    reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
-        alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=' ')),
-        alt.Y('count()'),
-        color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
-    ).properties(
-        height = 500, width = 300
-    ).add_selection(selected)
-    st.write(reason_chart)
+yes_proportion = separate_df['Reason_'+reason_option].mean()
+no_proportion = 1 - yes_proportion
+no_score = separate_df[question_option+'_code'][separate_df['Reason_'+reason_option] == 0].mean()
+yes_score = separate_df[question_option+'_code'][separate_df['Reason_'+reason_option] == 1].mean()
 
-with col[1]:
-    selected = alt.selection_single(empty="none")
-    reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
-        alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=' ')),
-        alt.Y('count()'),
-        color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
-    ).properties(
-        height = 500, width = 300
-    ).add_selection(selected)
-
-    question1_chart = alt.Chart(separate_df, title='Sleeping in separate beds helps us to stay together').mark_bar(tooltip = True
-    ).encode(
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(reason_option+' is not the reason', '{:.2%}'.format(no_proportion))
+    st.metric('Mean score for question:' + question_option.lower() + '(5 is strongly agree)', 
+                round(no_score, 3))
+    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 0], title='Not the reason').mark_bar(tooltip=True).encode(
         alt.X('count()'),
-        alt.Y('Sleeping in separate beds helps us to stay together', 
-            sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
-            axis=alt.Axis(title=' '))
-    ).transform_filter(selected)
-
-    question2_chart = alt.Chart(separate_df,title='We sleep better when we sleep in separate beds').mark_bar(tooltip = True
-    ).encode(
+        alt.Y(question_option, title = None,
+            sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
+        color = alt.value('#A2D9CE')
+    )
+    st.altair_chart(chart, use_container_width=True)
+    
+with col2:
+    st.metric(reason_option+' is the reason', '{:.2%}'.format(yes_proportion))
+    st.metric('Mean score for question:' + question_option.lower() + '(5 is strongly agree)', 
+                round(yes_score, 3))
+    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 1], title='Is the reason').mark_bar(tooltip=True).encode(
         alt.X('count()'),
-        alt.Y('We sleep better when we sleep in separate beds', 
-            sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'], 
-            axis=alt.Axis(title=' '))
-    ).transform_filter(selected)
-
-    question3_chart = alt.Chart(separate_df,title='Our sex life has improved as a result of sleeping in separate beds').mark_bar(tooltip = True
-    ).encode(
-        alt.X('count()'),
-        alt.Y('Our sex life has improved as a result of sleeping in separate beds', 
-        sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
-        axis=alt.Axis(title=' '))
-    ).transform_filter(selected)
-
-    st.write(alt.vconcat(reason_chart, question1_chart, question2_chart, question3_chart))
-
-
-
+        alt.Y(question_option, title = None,
+            sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
+        color = alt.value('#FAD7A0')
+    )
+    st.altair_chart(chart, use_container_width=True)
 
 st.markdown("---")
 st.markdown("This project was created by Erin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
