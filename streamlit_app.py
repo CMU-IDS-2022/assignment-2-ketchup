@@ -42,6 +42,60 @@ with st.expander("See cleaned data"):
     st.text("Data of couples who sleep separately:")
     st.write(separate_df)
 
+def get_slice_membership(df, genders, age, income, occupation):
+    """
+    Implement a function that computes which rows of the given dataframe should
+    be part of the slice, and returns a boolean pandas Series that indicates 0
+    if the row is not part of the slice, and 1 if it is part of the slice.
+    
+    In the example provided, we assume genders is a list of selected strings
+    (e.g. ['Male', 'Transgender']). We then filter the labels based on which
+    rows have a value for gender that is contained in this list. You can extend
+    this approach to the other variables based on how they are returned from
+    their respective Streamlit components.
+    """
+    labels = pd.Series([1] * len(df), index=df.index)
+    if genders:
+        labels &= df['Gender'].isin(genders)
+    if age:
+        labels &= df['Age'].isin(age)
+    if income:
+        labels &= df['Household income'].isin(income)
+    if occupation:
+        labels &= df['Occupation'].isin(occupation)
+    return labels
+
+def make_long_reason_dataframe(df, reason_prefix):
+    """
+    ======== You don't need to edit this =========
+    
+    Utility function that converts a dataframe containing multiple columns to
+    a long-style dataframe that can be plotted using Altair. For example, say
+    the input is something like:
+    
+         | why_no_vaccine_Reason 1 | why_no_vaccine_Reason 2 | ...
+    -----+-------------------------+-------------------------+------
+    1    | 0                       | 1                       | 
+    2    | 1                       | 1                       |
+    
+    This function, if called with the reason_prefix 'why_no_vaccine_', will
+    return a long dataframe:
+    
+         | id | reason      | agree
+    -----+----+-------------+---------
+    1    | 1  | Reason 2    | 1
+    2    | 2  | Reason 1    | 1
+    3    | 2  | Reason 2    | 1
+    
+    For every person (in the returned id column), there may be one or more
+    rows for each reason listed. The agree column will always contain 1s, so you
+    can easily sum that column for visualization.
+    """
+    reasons = df[[c for c in df.columns if c.startswith(reason_prefix)]].copy()
+    reasons['id'] = reasons.index
+    reasons = pd.wide_to_long(reasons, reason_prefix, i='id', j='reason', suffix='.+')
+    reasons = reasons[~pd.isna(reasons[reason_prefix])].reset_index().rename({reason_prefix: 'agree'}, axis=1)
+    return reasons
 
 # MAIN CODE
 
@@ -188,6 +242,7 @@ education_chart = alt.Chart(demo_df, title="Distribution of education level vs s
 demo_options = st.multiselect(
      '👇 Select one or more demographic factors you are interested in',
      ['Age', 'Gender', 'Household Income', 'Education'])
+
 if 'Age' in demo_options:
     st.write(age_chart)
     st.markdown("---")
@@ -205,9 +260,35 @@ if 'Household Income' in demo_options:
     
 # ===================================== PART 3 =====================================
 # Drop down demographics and timespan of relationship selection + reasons (bar chart)
-# Select the reasons for sleeping in separate beds and show the correspondent demographics data
+# Select the demographics and show the corresponding reasons for sleeping in separate beds
 
 st.header("Part 3: Why Couples Do Not Sleep Together?")
+
+# Dropdown filters
+cols = st.columns(4)
+with cols[0]:
+    genders = st.multiselect('Gender', separate_df['Gender'].unique())
+with cols[1]:
+    age = st.multiselect('Age', separate_df['Age'].unique())
+with cols[2]:
+    income = st.multiselect('Household Income', separate_df['Household income'].unique())
+with cols[3]:
+    occupation = st.multiselect('Occupation', separate_df['Occupation'].unique())
+    
+# Get the selected vavlues and reasons
+slice_labels = get_slice_membership(separate_df, genders, age, income, occupation)
+sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
+
+# Plot the bar chart for reasons
+if slice_labels.sum() != 0:
+    st.markdown("""---""")
+    st.write("The subgroup is selected based on the demographics of your interest.")
+    st.write("")
+    reasons_chart = alt.Chart(sleep_separately_reasons, title="Why Couples Don't Sleep Together?").mark_bar().encode(
+    x=alt.X('sum(agree)', axis=alt.Axis(title='Count of Respondents')),
+    y=alt.Y('reason:O', axis=alt.Axis(title=''))).interactive()
+    st.altair_chart(reasons_chart, use_container_width=True)
+
 
 # ===================================== PART 4 =====================================
 # Drop down reason selection + questions opinions (box plots)
@@ -247,7 +328,8 @@ question_option = st.selectbox(
 )
 
 st.write("---")
-st.subheader('If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?')
+st.subheader('If ' + reason_option.lower() +', what is your opinion about the statement: '\
+             +question_option.lower() + '.')
 
 yes_proportion = separate_df['Reason_'+reason_option].mean()
 no_proportion = 1 - yes_proportion
