@@ -20,8 +20,8 @@ def load_data(url, encode = 'utf-8'):
     return pd.read_csv(url, encoding = encode, index_col=0)
 
 url_raw = 'https://raw.githubusercontent.com/fivethirtyeight/data/22a478af3edc00f69693c3f5f4604b2f1fd024b0/sleeping-alone-data/sleeping-alone-data.csv'
-url_separate = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/Data/sleep_separately.csv'
-url_together = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/Data/sleep_together.csv'
+url_separate = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/Data/sleep_separately1.csv'
+url_together = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/Data/sleep_together1.csv'
 url_demo = 'https://raw.githubusercontent.com/CMU-IDS-2022/assignment-2-ketchup/master/Data/demographic_data.csv'
 
 raw = load_data(url_raw, encode ='ISO-8859-1')
@@ -42,6 +42,7 @@ with st.expander("See cleaned data"):
     st.text("Data of couples who sleep separately:")
     st.write(separate_df)
 
+##==============================================function===============================================
 def get_slice_membership(df, genders, age, income, occupation):
     """
     Implement a function that computes which rows of the given dataframe should
@@ -97,9 +98,8 @@ def make_long_reason_dataframe(df, reason_prefix):
     reasons = reasons[~pd.isna(reasons[reason_prefix])].reset_index().rename({reason_prefix: 'agree'}, axis=1)
     return reasons
 
+
 # MAIN CODE
-
-
 # ===================================== PART 1 =====================================
 # Basic information
 # Sleep together or not?
@@ -153,6 +153,7 @@ if group == 'Relationship Length':
      st.write(length_chart)
 else:
      st.write(status_chart)
+st.markdown("---")
 
 # freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
 #     x = alt.X('count()'),
@@ -242,7 +243,6 @@ education_chart = alt.Chart(demo_df, title="Distribution of education level vs s
 demo_options = st.multiselect(
      '👇 Select one or more demographic factors you are interested in',
      ['Age', 'Gender', 'Household Income', 'Education'])
-
 if 'Age' in demo_options:
     st.write(age_chart)
     st.markdown("---")
@@ -260,8 +260,8 @@ if 'Household Income' in demo_options:
     
 # ===================================== PART 3 =====================================
 # Drop down demographics and timespan of relationship selection + reasons (bar chart)
-# Select the demographics and show the corresponding reasons for sleeping in separate beds
-
+# Select the reasons for sleeping in separate beds and show the correspondent demographics data
+st.markdown("---")
 st.header("Part 3: Why Couples Do Not Sleep Together?")
 
 # Dropdown filters
@@ -277,10 +277,11 @@ with cols[3]:
     
 # Get the selected vavlues and reasons
 slice_labels = get_slice_membership(separate_df, genders, age, income, occupation)
-sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
+st.write("The sliced dataset contains {} elements ({:.1%} of total).".format(slice_labels.sum(), slice_labels.sum() / len(separate_df)))
 
 # Plot the bar chart for reasons
-if slice_labels.sum() != 0:
+if slice_labels.sum() < len(separate_df):
+    sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
     st.markdown("""---""")
     st.write("The subgroup is selected based on the demographics of your interest.")
     st.write("")
@@ -327,9 +328,21 @@ question_option = st.selectbox(
     'Our sex life has improved as a result of sleeping in separate beds' ]
 )
 
+# separate_df['Reason_'+reason_option+'_Y/N'] = separate_df['Reason_'+reason_option].map({0: 'NO', 1: 'YES'})
+# chart_title = 'If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?'
+# reason_chart = alt.Chart(separate_df, title = chart_title).mark_bar(tooltip = True).encode(
+#     alt.X('count()'),
+#     alt.Y(question_option, title = None,
+#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
+#     alt.Color('Reason_'+reason_option+'_Y/N', scale = alt.Scale(domain=['YES', 'NO'], range=['Orange', 'lightgreen']), legend = None),
+#     column = 'Reason_'+reason_option+'_Y/N'
+# ).properties(
+#     width = 250, height=200
+# )
+# st.write(reason_chart)
+
 st.write("---")
-st.subheader('If ' + reason_option.lower() +', what is your opinion about the statement: '\
-             +question_option.lower() + '.')
+st.subheader('If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?')
 
 yes_proportion = separate_df['Reason_'+reason_option].mean()
 no_proportion = 1 - yes_proportion
@@ -338,10 +351,11 @@ yes_score = separate_df[question_option+'_code'][separate_df['Reason_'+reason_op
 
 col1, col2 = st.columns(2)
 with col1:
+    ## answer no to the reason
     st.metric(reason_option+' is not the reason', '{:.2%}'.format(no_proportion))
     st.metric('Mean score for question:' + question_option.lower() + '(5 is strongly agree)', 
                 round(no_score, 3))
-    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 0], title='Not the reason').mark_bar(tooltip=True).encode(
+    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 0]).mark_bar(tooltip=True).encode(
         alt.X('count()'),
         alt.Y(question_option, title = None,
             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
@@ -350,6 +364,7 @@ with col1:
     st.altair_chart(chart, use_container_width=True)
     
 with col2:
+    ## answer yea to the reason
     st.metric(reason_option+' is the reason', '{:.2%}'.format(yes_proportion))
     st.metric('Mean score for question:' + question_option.lower() + '(5 is strongly agree)', 
                 round(yes_score, 3))
@@ -361,18 +376,96 @@ with col2:
     )
     st.altair_chart(chart, use_container_width=True)
 
+# Box plot of the question
+separate_df['Reason_'+reason_option+'_Y/N'] = separate_df['Reason_'+reason_option].map({0: 'NO', 1: 'YES'})
+score_chart = alt.Chart(separate_df, title=question_option).mark_boxplot(size = 50).encode(
+    alt.X(question_option+'_code', title = 'Larger the score, higher the level of agreement'),
+    alt.Y('Reason_'+reason_option+'_Y/N', title = None),
+    alt.Color('Reason_'+reason_option+'_Y/N', legend = None, 
+                scale = alt.Scale(domain = ['YES', 'NO'], range=['#FAD7A0', '#A2D9CE']))
+).properties(
+    width=700, height = 200
+)
+st.write(score_chart)
+    
+# col = st.columns(2)
+# selected = alt.selection_multi(empty="none", on='mouseover')
+# with col[0]:
+#     reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
+#         alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=None)),
+#         alt.Y('count()'),
+#         color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
+#     ).properties(
+#         height = 500, width = 300
+#     ).add_selection(selected)
+#     st.write(reason_chart)
+
+# with col[1]:
+#     # selected = alt.selection_single(empty="none")
+#     # reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
+#     #     alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=' ')),
+#     #     alt.Y('count()'),
+#     #     color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
+#     # ).properties(
+#     #     height = 500, width = 300
+#     # ).add_selection(selected)
+
+#     question1_chart = alt.Chart(separate_df, title='Sleeping in separate beds helps us to stay together').mark_bar(tooltip = True
+#     ).encode(
+#         alt.X('count()'),
+#         alt.Y('Sleeping in separate beds helps us to stay together', 
+#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
+#             axis=alt.Axis(title=' ')),
+#         color = 'Reason_'+reason_options+':O'
+#     ).transform_filter(selected)
+
+#     question2_chart = alt.Chart(separate_df,title='We sleep better when we sleep in separate beds').mark_bar(tooltip = True
+#     ).encode(
+#         alt.X('count()'),
+#         alt.Y('We sleep better when we sleep in separate beds', 
+#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'], 
+#             axis=alt.Axis(title=' '))
+#     ).transform_filter(selected)
+
+#     question3_chart = alt.Chart(separate_df,title='Our sex life has improved as a result of sleeping in separate beds').mark_bar(tooltip = True
+#     ).encode(
+#         alt.X('count()'),
+#         alt.Y('Our sex life has improved as a result of sleeping in separate beds', 
+#         sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
+#         axis=alt.Axis(title=' '))
+#     ).transform_filter(selected)
+
+#     st.write(alt.vconcat(question1_chart, question2_chart, question3_chart))
+
+# ===================================== PART 5 =====================================
+st.header("Part 5: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
+
+freq_option = st.selectbox(
+    "👇 Select the frequency of sleeping separately you want to see",
+    ['A few times per month', 'A few times per week', 'Every night', 'Once a month or less', 'Once a year or less']
+)
+
+feature_option = st.selectbox(
+    "👇 Select the demographic features you want to see",
+    ['Age', 'Gender', 'Education', 'Household income']
+)
+selected = alt.selection_multi()
+place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
+    alt.X('count()'),
+    alt.Y('YouSleepAt'),
+    color = feature_option
+).add_selection(selected)
+
+partner_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
+    alt.X('count()'),
+    alt.Y('PartnerSleepAt'),
+    color = feature_option
+).transform_filter(selected)
+st.write(place_chart & partner_chart)
+
+
+
+
 st.markdown("---")
 st.markdown("This project was created by Erin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
 
-
-
-# Brushes
-sleep_together_brush = alt.selection_multi(fields=['sleep together?'])
-status_brush = alt.selection_multi(fields=['CurrentRelationshipStatus'])
-length_brush = alt.selection_multi(fields=['RelationshipLength'])
-freq_brush = alt.selection_multi(fields=['Frequency in separate beds'])
-age_brush = alt.selection_multi(fields=['Age'])
-gender_brush = alt.selection_multi(fields=['Gender'])
-income_brush = alt.selection_multi(fields=['Household income'])
-education_brush = alt.selection_multi(fields=['Education'])
-location_brush = alt.selection_multi(fields=['Location'])
