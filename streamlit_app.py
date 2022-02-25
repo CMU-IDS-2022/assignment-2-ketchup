@@ -282,14 +282,14 @@ st.write("The sliced dataset contains {} elements ({:.1%} of total).".format(sli
 # Plot the bar chart for reasons
 if slice_labels.sum() < len(separate_df):
     sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
-    st.markdown("""---""")
     st.write("The subgroup is selected based on the demographics of your interest.")
     st.write("")
     reasons_chart = alt.Chart(sleep_separately_reasons, title="Why Couples Don't Sleep Together?").mark_bar().encode(
     x=alt.X('sum(agree)', axis=alt.Axis(title='Count of Respondents')),
-    y=alt.Y('reason:O', axis=alt.Axis(title=''))).interactive()
+    y=alt.Y('reason:O', axis=alt.Axis(title='')),
+    color = alt.value('#AED6F1')).interactive()
     st.altair_chart(reasons_chart, use_container_width=True)
-
+st.markdown("""---""")
 
 # ===================================== PART 4 =====================================
 # Drop down reason selection + questions opinions (box plots)
@@ -453,7 +453,7 @@ selected = alt.selection_multi()
 place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
     alt.X('count()'),
     alt.Y('YouSleepAt'),
-    color = feature_option
+    color = alt.Color(feature_option, scale = alt.Scale(scheme = 'tableau20'))
 ).add_selection(selected)
 
 partner_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
@@ -464,6 +464,63 @@ partner_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] 
 st.write(place_chart & partner_chart)
 
 
+st.write('---')
+age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
+age_selected = alt.selection_single(
+    fields = ['Age'],
+    bind = age_dropdown,
+    name = "Couple age"
+)
+edu_dropdown = alt.binding_select(options = separate_df['Education'].unique())
+edu_selected = alt.selection_single(
+    fields = ['Education'],
+    bind = edu_dropdown,
+    name = "Couple education"
+)
+gender_dropdown = alt.binding_select(options = separate_df['Gender'].unique())
+gender_selected = alt.selection_single(
+    fields = ['Gender'],
+    bind = gender_dropdown,
+    name = "Couple gender"
+)
+income_dropdown = alt.binding_select(options = separate_df['Household income'].unique())
+income_selected = alt.selection_single(
+    fields = ['Household income'],
+    bind = income_dropdown,
+    name = "Couple income"
+)
+you_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
+    alt.X('count()'),
+    alt.Y('YouSleepAt'),
+    color = alt.value('#D6EAF8')
+).add_selection(age_selected
+).transform_filter(age_selected
+).add_selection(edu_selected
+).transform_filter(edu_selected
+).add_selection(gender_selected
+).transform_filter(gender_selected
+).add_selection(income_selected
+).transform_filter(income_selected
+).properties(
+    width = 600
+)
+partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
+    alt.X('count()'),
+    alt.Y('PartnerSleepAt'),
+    color = alt.value('#FAD7A0')
+).add_selection(age_selected
+).transform_filter(age_selected
+).add_selection(edu_selected
+).transform_filter(edu_selected
+).add_selection(gender_selected
+).transform_filter(gender_selected
+).add_selection(income_selected
+).transform_filter(income_selected
+).properties(
+    width = 600
+)
+
+st.write(you_sleep_at_chart & partner_sleep_at_chart)
 
 
 st.markdown("---")
