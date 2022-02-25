@@ -328,19 +328,6 @@ question_option = st.selectbox(
     'Our sex life has improved as a result of sleeping in separate beds' ]
 )
 
-# separate_df['Reason_'+reason_option+'_Y/N'] = separate_df['Reason_'+reason_option].map({0: 'NO', 1: 'YES'})
-# chart_title = 'If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?'
-# reason_chart = alt.Chart(separate_df, title = chart_title).mark_bar(tooltip = True).encode(
-#     alt.X('count()'),
-#     alt.Y(question_option, title = None,
-#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
-#     alt.Color('Reason_'+reason_option+'_Y/N', scale = alt.Scale(domain=['YES', 'NO'], range=['Orange', 'lightgreen']), legend = None),
-#     column = 'Reason_'+reason_option+'_Y/N'
-# ).properties(
-#     width = 250, height=200
-# )
-# st.write(reason_chart)
-
 st.write("---")
 st.subheader('If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?')
 
@@ -387,55 +374,6 @@ score_chart = alt.Chart(separate_df, title=question_option).mark_boxplot(size = 
     width=700, height = 200
 )
 st.write(score_chart)
-    
-# col = st.columns(2)
-# selected = alt.selection_multi(empty="none", on='mouseover')
-# with col[0]:
-#     reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
-#         alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=None)),
-#         alt.Y('count()'),
-#         color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
-#     ).properties(
-#         height = 500, width = 300
-#     ).add_selection(selected)
-#     st.write(reason_chart)
-
-# with col[1]:
-#     # selected = alt.selection_single(empty="none")
-#     # reason_chart = alt.Chart(separate_df, title=reason_options).mark_bar(tooltip = True).encode(
-#     #     alt.X('Reason_'+reason_options+':O', axis=alt.Axis(title=' ')),
-#     #     alt.Y('count()'),
-#     #     color=alt.condition(selected, alt.ColorValue('#FCDEC1'), alt.ColorValue("lightgrey"))
-#     # ).properties(
-#     #     height = 500, width = 300
-#     # ).add_selection(selected)
-
-#     question1_chart = alt.Chart(separate_df, title='Sleeping in separate beds helps us to stay together').mark_bar(tooltip = True
-#     ).encode(
-#         alt.X('count()'),
-#         alt.Y('Sleeping in separate beds helps us to stay together', 
-#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
-#             axis=alt.Axis(title=' ')),
-#         color = 'Reason_'+reason_options+':O'
-#     ).transform_filter(selected)
-
-#     question2_chart = alt.Chart(separate_df,title='We sleep better when we sleep in separate beds').mark_bar(tooltip = True
-#     ).encode(
-#         alt.X('count()'),
-#         alt.Y('We sleep better when we sleep in separate beds', 
-#             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'], 
-#             axis=alt.Axis(title=' '))
-#     ).transform_filter(selected)
-
-#     question3_chart = alt.Chart(separate_df,title='Our sex life has improved as a result of sleeping in separate beds').mark_bar(tooltip = True
-#     ).encode(
-#         alt.X('count()'),
-#         alt.Y('Our sex life has improved as a result of sleeping in separate beds', 
-#         sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree'],
-#         axis=alt.Axis(title=' '))
-#     ).transform_filter(selected)
-
-#     st.write(alt.vconcat(question1_chart, question2_chart, question3_chart))
 
 # ===================================== PART 5 =====================================
 st.header("Part 5: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
