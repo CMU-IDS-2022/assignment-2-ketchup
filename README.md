@@ -1,7 +1,7 @@
 # CMU Interactive Data Science Assigment 2
 
 * **Team members**: hanjuh@andrew.cmu.edu and lihsinl@andrew.cmu.edu 
-* **Online URL**: https://share.streamlit.io/cmu-ids-2022/ketchup/master/streamlit_app.py 
+* **Online URL**: https://share.streamlit.io/cmu-ids-2022/assignment-2-ketchup
 
 ## Instructions
 
