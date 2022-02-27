@@ -156,6 +156,18 @@ else:
      st.write(status_chart)
 st.markdown("---")
 
+# freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
+#     x = alt.X('count()'),
+#     y = alt.Y('Frequency in separate beds', sort = ['Never', 'Once a year or less', 'Once a month or less', 'A few times per month', 'A few times per week', 'Every night']),
+#     color=alt.Color('Sleep Together?',
+#         scale=alt.Scale(
+#         domain=['YES', 'NO'],
+#         range=['pink', 'lightblue']))
+# ).properties(
+#     width = 600
+# )
+# st.write(freq_chart)
+
 
 # ===================================== PART 2 =====================================
 # Correlations between frequency of sleeping separately and demographics
@@ -367,7 +379,7 @@ st.write(score_chart)
 
 # ===================================== PART 5 =====================================
 st.write('---')
-st.header("Part 5: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
+st.header("Part 5: What's The Relaitonship Between Demographic Features and The Frequency of Sleeping Separately?")
 
 freq_option = st.selectbox(
     "👇 Select the frequency of sleeping separately you want to see",
@@ -389,6 +401,9 @@ place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] ==
 st.write(place_chart)
 
 st.write('---')
+
+# ===================================== PART 6 =====================================
+st.header("Part 6: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
 st.text("👇 Select the population demographic features that you want to see")
 age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
 age_selected = alt.selection_single(
@@ -448,8 +463,8 @@ partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
 st.write(you_sleep_at_chart & partner_sleep_at_chart)
 st.write('---')
 
-# ===================================== PART 6 =====================================
-st.header("Part 6: Person Sampling")
+# ===================================== PART 7 =====================================
+st.header("Part 7: Person Sampling")
 
 st.write("""
 Select a random person from the data, and see his/her characteristics""")
