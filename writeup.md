@@ -9,6 +9,7 @@ TODO: Short abstract describing the main goals and how you achieved them.
 ## Project Goals
 
 TODO: **A clear description of the goals of your project.** Describe the question that you are enabling a user to answer. The question should be compelling and the solution should be focused on helping users achieve their goals. 
+
 To understand the sleeping habits of different couples. What types of demographic features will lead to a higher proportion of sleeping separately with their partner. Demographic features included age, gender, household income, occupation, relationship status, relationship length.
 
 ## Design
