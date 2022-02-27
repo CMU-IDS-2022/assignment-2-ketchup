@@ -1,4 +1,5 @@
 from os import sep
+from time import sleep
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -155,18 +156,6 @@ else:
      st.write(status_chart)
 st.markdown("---")
 
-# freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
-#     x = alt.X('count()'),
-#     y = alt.Y('Frequency in separate beds', sort = ['Never', 'Once a year or less', 'Once a month or less', 'A few times per month', 'A few times per week', 'Every night']),
-#     color=alt.Color('Sleep Together?',
-#         scale=alt.Scale(
-#         domain=['YES', 'NO'],
-#         range=['pink', 'lightblue']))
-# ).properties(
-#     width = 600
-# )
-# st.write(freq_chart)
-
 
 # ===================================== PART 2 =====================================
 # Correlations between frequency of sleeping separately and demographics
@@ -278,7 +267,7 @@ with cols[3]:
 # Get the selected vavlues and reasons
 slice_labels = get_slice_membership(separate_df, genders, age, income, occupation)
 st.write("The sliced dataset contains {} elements ({:.1%} of total).".format(slice_labels.sum(), slice_labels.sum() / len(separate_df)))
-
+st.write("One respondent may select multiple reasons.")
 # Plot the bar chart for reasons
 if slice_labels.sum() < len(separate_df):
     sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
@@ -328,7 +317,6 @@ question_option = st.selectbox(
     'Our sex life has improved as a result of sleeping in separate beds' ]
 )
 
-st.write("---")
 st.subheader('If ' + reason_option.lower() +', does ' + question_option.lower() + ' ?')
 
 yes_proportion = separate_df['Reason_'+reason_option].mean()
@@ -342,7 +330,7 @@ with col1:
     st.metric(reason_option+' is not the reason', '{:.2%}'.format(no_proportion))
     st.metric('Mean score for question:' + question_option.lower() + '(5 is strongly agree)', 
                 round(no_score, 3))
-    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 0]).mark_bar(tooltip=True).encode(
+    chart = alt.Chart(separate_df[separate_df['Reason_'+reason_option] == 0], title = 'Is not the reason').mark_bar(tooltip=True).encode(
         alt.X('count()'),
         alt.Y(question_option, title = None,
             sort = ['Strongly agree', 'Somewhat agree','Neither agree nor disagree', 'Somewhat disagree', 'Strongly disagree']),
@@ -365,7 +353,8 @@ with col2:
 
 # Box plot of the question
 separate_df['Reason_'+reason_option+'_Y/N'] = separate_df['Reason_'+reason_option].map({0: 'NO', 1: 'YES'})
-score_chart = alt.Chart(separate_df, title=question_option).mark_boxplot(size = 50).encode(
+score_chart = alt.Chart(separate_df, title = 'Box plot for the responses of ' + question_option.lower()).mark_boxplot(size = 50
+).encode(
     alt.X(question_option+'_code', title = 'Larger the score, higher the level of agreement'),
     alt.Y('Reason_'+reason_option+'_Y/N', title = None),
     alt.Color('Reason_'+reason_option+'_Y/N', legend = None, 
@@ -375,7 +364,9 @@ score_chart = alt.Chart(separate_df, title=question_option).mark_boxplot(size = 
 )
 st.write(score_chart)
 
+
 # ===================================== PART 5 =====================================
+st.write('---')
 st.header("Part 5: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
 
 freq_option = st.selectbox(
@@ -384,52 +375,48 @@ freq_option = st.selectbox(
 )
 
 feature_option = st.selectbox(
-    "👇 Select the demographic features you want to see",
+    "👇 Select the demographic features you want to use to classify",
     ['Age', 'Gender', 'Education', 'Household income']
 )
 selected = alt.selection_multi()
-place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
+place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar(tooltip=True).encode(
     alt.X('count()'),
-    alt.Y('YouSleepAt'),
-    color = alt.Color(feature_option, scale = alt.Scale(scheme = 'tableau20'))
-).add_selection(selected)
-
-partner_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar().encode(
-    alt.X('count()'),
-    alt.Y('PartnerSleepAt'),
-    color = feature_option
-).transform_filter(selected)
-st.write(place_chart & partner_chart)
-
+    alt.Y(feature_option),
+    color = alt.value('#EBDEF0')
+).properties(
+    width = 600
+)
+st.write(place_chart)
 
 st.write('---')
+st.text("👇 Select the population demographic features that you want to see")
 age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
 age_selected = alt.selection_single(
     fields = ['Age'],
     bind = age_dropdown,
-    name = "Couple age"
+    name = "4 Select"
 )
 edu_dropdown = alt.binding_select(options = separate_df['Education'].unique())
 edu_selected = alt.selection_single(
     fields = ['Education'],
     bind = edu_dropdown,
-    name = "Couple education"
+    name = "3 Select"
 )
 gender_dropdown = alt.binding_select(options = separate_df['Gender'].unique())
 gender_selected = alt.selection_single(
     fields = ['Gender'],
     bind = gender_dropdown,
-    name = "Couple gender"
+    name = "2 Select"
 )
 income_dropdown = alt.binding_select(options = separate_df['Household income'].unique())
 income_selected = alt.selection_single(
     fields = ['Household income'],
     bind = income_dropdown,
-    name = "Couple income"
+    name = "1 Select"
 )
 you_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
     alt.X('count()'),
-    alt.Y('YouSleepAt'),
+    alt.Y('YouSleepAt', title = 'Respondent sleeping at'),
     color = alt.value('#D6EAF8')
 ).add_selection(age_selected
 ).transform_filter(age_selected
@@ -444,7 +431,7 @@ you_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
 )
 partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
     alt.X('count()'),
-    alt.Y('PartnerSleepAt'),
+    alt.Y('PartnerSleepAt', title = 'Partner sleeping at'),
     color = alt.value('#FAD7A0')
 ).add_selection(age_selected
 ).transform_filter(age_selected
@@ -459,6 +446,34 @@ partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
 )
 
 st.write(you_sleep_at_chart & partner_sleep_at_chart)
+st.write('---')
+
+# ===================================== PART 6 =====================================
+st.header("Part 6: Person Sampling")
+
+st.write("""
+Select a random person from the data, and see his/her characteristics""")
+
+sleep_separate = st.checkbox("Sample a person who sometimes sleeps separately with his/her partner")
+
+if st.button("Get Random Person"):
+    df_to_sample = separate_df if sleep_separate else together_df
+    person = df_to_sample.sample(n=1).iloc[0]
+    st.write(f"""
+This person is a **{person.Gender.lower()}**, his/her job is **{person.Occupation.lower()}**, age is between **{person.Age}**, with a 
+**{person.Education.lower()}**, and a household income between **{person['Household income'].lower()}**.""")
+    
+    st.write(f"""The sampled person is **{person.CurrentRelationshipStatus.lower()}**, 
+            and has been together for **{person.RelationshipLength.lower()}**.""")
+
+    if sleep_separate:
+        st.write(f"""This person sleeps separately with his/her partner **{person['Frequency in separate beds'].lower()}**.""")
+        st.write(f'When they are not sleeping together:')
+        st.markdown(f"""- The place where this person sleeps: **{person.YouSleepAt.lower()}**.""") 
+        st.write(f"""- The place where his/her partner sleeps: **{person.PartnerSleepAt.lower()}**.""")
+    
+    else:
+        st.write(f"""This person sleeps with his/her partnes.""")
 
 
 st.markdown("---")
