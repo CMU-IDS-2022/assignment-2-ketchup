@@ -2,16 +2,16 @@
 
 ![A screenshot of your application. Could be a GIF.](Figs/screenshot.png)
 
-The project is inspired by a longlasting question that many kids may have in their childhood: Why my parents don't sleep together?
+The project is inspired by a long-lasting question that many kids may have in their childhood: Why my parents don't sleep together?
 
-FiveThirtyEight published an article [*Dear Mona, How Many Couples Sleep in Separate Beds?*](https://fivethirtyeight.com/features/dear-mona-how-many-couples-sleep-in-separate-beds/) with the result of an online survey to explore people's sleeping arrangements with their partner. The survey provides answers to several intriguing questions: How many couples sleep in separate beds? What kind of people don't sleep with their partner? Why don't they sleep together? We visualize the dataset through an interactive web application which offers the audience the opportunity to explore this interesting dataset and unfold the untold.
+FiveThirtyEight published an article [*Dear Mona, How Many Couples Sleep in Separate Beds?*](https://fivethirtyeight.com/features/dear-mona-how-many-couples-sleep-in-separate-beds/) with the result of an online survey to explore people's sleeping arrangements with their partner. The survey provides answers to several intriguing questions: How many couples sleep in separate beds? What kind of people doesn't sleep with their partner? Why don't they sleep together? We visualize the dataset through an interactive web application that offers users the opportunity to explore this interesting dataset and unfold the untold.
 
 
 ## Project Goals
 
-TODO: **A clear description of the goals of your project.** Describe the question that you are enabling a user to answer. The question should be compelling and the solution should be focused on helping users achieve their goals. 
+As discussed previously, we hope to use this dataset to answer why couples do not sleep together. This well-known but barely discussed question extends the discussion to the broader social psychology area. We utilized the demographic data collected in the survey, such as `age`, `gender`, `household income`, `occupation`, to excavate the insights behind it - are people with specific demographics associated with a higher possibility for sleeping separately with their partner?
 
-To understand the sleeping arrangements of different couples. What types of demographic features will lead to a higher proportion of sleeping separately with their partner. Demographic features included age, gender, household income, occupation, relationship status, relationship length.
+Our web application enables users to first look at the dataset, understanding what was in the survey and the basic demographics of the respondents. With that knowledge in mind, we develop various topics stemming from the study and allow users to explore them based on their interests. As an example, one section will enable users to see the correlation between demographics of those who sleep separately with their partner and the frequency of sleeping separately.
 
 
 ## Design
