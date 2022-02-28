@@ -21,16 +21,17 @@ TODO: **A rationale for your design decisions.** How did you choose your particu
 
 ## Development
 
-TODO: **An overview of your development process.** Describe how the work was split among the team members. Include a commentary on the development process, including answers to the following questions: Roughly how much time did you spend developing your application (in people-hours)? What aspects took the most time?
-
 The project is developed by Kylie Hsieh and Erin Lin. The team works together throughout the project, but to be more specific, Kylie leads the data cleaning and software development, and Erin leads the document write-up and topic development.
 
 We divide the project into three phases: (1) research and discovery, (2) design, and (3) development.
 | Phase  | Task and Time Spent (in people-hours) | Total Time Spent (in people-hours)|
 | ------------- | ------------- | ------------- |
 | Research and Discovery | ・Explore and select dataset of interest (1)<br/> ・Define project scope (2)| 3 |
-| Design  | ・High-level design (questions, topics, contents, etc.) (2)<br/> ・Visualization design (chart type, layout, color theme)(2)| 4 |
+| Design  | ・High-level design (questions, topics, contents, etc.) (2)<br/> ・Visualization design (chart type, layout, color theme)(3)| 5 |
 | Development  | ・Environment setup (0.5)<br/> - Data cleaning (3)<br/> ・Visualization development (15)<br/> - Testing (2)<br/> - Document write-up (2)| 20.5 |
+
+It was pretty smooth when choosing the dataset and topic as a team. It didn't take much time for us to conduct the high-level design either because we both agreed this is an interesting dataset, and our questions derived from the data were similar. In contrast, we spent relatively more time thinking about the visualization design. Because this is survey data, there are actually not too many choices for visualizations but bar charts. We decided to try to incorporate more different interactivity techniques to make up for the potential monotonous chart variety.
+
 
 ## Success Story
 
