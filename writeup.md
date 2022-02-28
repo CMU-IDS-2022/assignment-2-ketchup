@@ -28,8 +28,9 @@ The project is developed by Kylie Hsieh and Erin Lin. The team works together th
 We divide the project into three phases: (1) research and discovery, (2) design, and (3) development.
 | Phase  | Task and Time Spent (in people-hours) |
 | ------------- | ------------- |
-| Research and Discovery | - Explore and select dataset of interest (1)<br/> - Define project scope (1)<br/> -   |
-| Content Cell  | Content Cell  |
+| Research and Discovery | - Explore and select dataset of interest (1)<br/> - Define project scope (2)<br/>|
+| Design  | - High-level design (questions, topics, contents, etc.) (2)<br/> - Visualization design (chart type, layout, color theme)(2)<br/>|
+| Development  | - Environment setup (0.5)<br/> - Data cleaning (3)<br/> - Visualization development (15)<br/> - Testing (2)<br/> - Document write-up (2)|
 
 ## Success Story
 
