@@ -246,13 +246,38 @@ if 'Household Income' in demo_options:
     st.write(income_chart)
     st.markdown("---")
 
-
 # ===================================== PART 3 =====================================
+st.write('---')
+st.header("Part 3: How Often Do They Sleep Separately?")
+st.write("Following the previous section, among those who sleep separately, we can also explore\
+         the relationships between their demographics and the frequency they sleep in separate beds?")
+
+freq_option = st.selectbox(
+    "👇 Select the frequency of sleeping separately you want to see",
+    ['A few times per month', 'A few times per week', 'Every night', 'Once a month or less', 'Once a year or less']
+)
+
+feature_option = st.selectbox(
+    "👇 Select the demographic features you want to use to classify",
+    ['Age', 'Gender', 'Education', 'Household income']
+)
+selected = alt.selection_multi()
+place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar(tooltip=True).encode(
+    alt.X('count()'),
+    alt.Y(feature_option),
+    color = alt.value('#A2D9CE')
+).properties(
+    width = 600
+)
+st.write(place_chart)
+
+
+# ===================================== PART 4 =====================================
 # Drop down demographics and timespan of relationship selection + reasons (bar chart)
 # Select the reasons for sleeping in separate beds and show the correspondent demographics data
 
 st.markdown("---")
-st.header("Part 3: Why Do Couples Not Sleep Together?")
+st.header("Part 4: Why Do Couples Not Sleep Together?")
 st.write("After understanding the dataset and the basic demographics of the respondents, it's time to learn more about\
          one of the most interesting part in this survey: the reason why people don't sleep with their partner.")
 st.write("You can select one or more demographics to filter a subset of respondents, and then look at the reasons why\
@@ -287,12 +312,12 @@ if slice_labels.sum() < len(separate_df):
     st.write("*Note*: One respondent may select multiple reasons.")
 
 
-# ===================================== PART 4 =====================================
+# ===================================== PART 5 =====================================
 # Drop down reason selection + questions opinions (box plots)
 # Select the reasons for sleeping in separate beds and show the correspondent opinion
 
 st.markdown("---")
-st.header("Part 4: Is Sleeping Separately Better?")
+st.header("Part 5: Is Sleeping Separately Better?")
 st.write("""In addition to investigating the reasons for sleeping separately,
          the survey also asked those who don't sleep with their partner for their opinions of the following three questions.""")
 st.markdown("- Sleeping in separate beds helps us to stay together")
@@ -373,31 +398,6 @@ score_chart = alt.Chart(separate_df, title = 'Box plot for the responses of ' + 
 )
 st.write(score_chart)
 st.markdown("*Note:* `5` represents strongly agree and `1` represents strongly disagree.")
-
-
-# ===================================== PART 5 =====================================
-st.write('---')
-st.header("Part 5: What's The Relaitonship Between Demographic Features and The Frequency of Sleeping Separately?")
-
-freq_option = st.selectbox(
-    "👇 Select the frequency of sleeping separately you want to see",
-    ['A few times per month', 'A few times per week', 'Every night', 'Once a month or less', 'Once a year or less']
-)
-
-feature_option = st.selectbox(
-    "👇 Select the demographic features you want to use to classify",
-    ['Age', 'Gender', 'Education', 'Household income']
-)
-selected = alt.selection_multi()
-place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar(tooltip=True).encode(
-    alt.X('count()'),
-    alt.Y(feature_option),
-    color = alt.value('#A2D9CE')
-).properties(
-    width = 600
-)
-st.write(place_chart)
-
 
 
 # ===================================== PART 6 =====================================
