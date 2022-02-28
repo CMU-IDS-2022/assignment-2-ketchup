@@ -250,7 +250,7 @@ if 'Household Income' in demo_options:
 st.write('---')
 st.header("Part 3: How Often Do They Sleep Separately?")
 st.write("Following the previous section, among those who sleep separately, we can also explore\
-         the relationships between their demographics and the frequency they sleep in separate beds?")
+         the relationships between their demographics and the frequency they sleep in separate beds.")
 
 freq_option = st.selectbox(
     "👇 Select the frequency of sleeping separately you want to see",
