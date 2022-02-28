@@ -2,9 +2,8 @@
 
 ![A screenshot of your application. Could be a GIF.](Figs/screenshot.png)
 
-TODO: Update screenshot
+The project is inspired by a longlasting question that many kids may have in their childhood: Why my parents don't sleep together? FiveThirtyEight publishes an article [*Dear Mona, How Many Couples Sleep in Separate Beds?*](https://fivethirtyeight.com/features/dear-mona-how-many-couples-sleep-in-separate-beds/) with a survey to explore people's sleeping arrangements. The survey was conducted via a online platform. It provides answers to several intriguing questions: How many couples sleep in separate beds? What kind of people don't sleep with their partner? Why don't they sleep together? We visualize the dataset through an interactive web application which offers the audience the opportunity to explore this interesting dataset and unfold the untold.
 
-TODO: Short abstract describing the main goals and how you achieved them.
 
 ## Project Goals
 
