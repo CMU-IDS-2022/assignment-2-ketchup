@@ -11,7 +11,7 @@ FiveThirtyEight published an article [*Dear Mona, How Many Couples Sleep in Sepa
 
 As discussed previously, we hope to use this dataset to answer why couples do not sleep together. This well-known but barely discussed question extends the discussion to the broader social psychology area. We utilized the demographic data collected in the survey, such as `age`, `gender`, `household income`, `occupation`, to excavate the insights behind it - are people with specific demographics associated with a higher possibility for sleeping separately with their partner?
 
-Our web application enables users to first look at the dataset, understanding what was in the survey and the basic demographics of the respondents. With that knowledge in mind, we develop various topics stemming from the study and allow users to explore them based on their interests. As an example, one section will enable users to see the correlation between demographics of those who sleep separately with their partner and the frequency of sleeping separately.
+Our web application enables users to first look at the dataset, understanding what was in the survey and the basic demographics of the respondents. With that knowledge in mind, we develop various topics stemming from the study and allow users to explore them based on their interests. As an example, one section enables users to see the correlation between demographics of those who sleep separately with their partner and the frequency of sleeping separately.
 
 
 ## Design
