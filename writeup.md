@@ -23,6 +23,13 @@ TODO: **A rationale for your design decisions.** How did you choose your particu
 
 TODO: **An overview of your development process.** Describe how the work was split among the team members. Include a commentary on the development process, including answers to the following questions: Roughly how much time did you spend developing your application (in people-hours)? What aspects took the most time?
 
+The project is developed by Kylie Hsieh and Erin Lin. The team works together throughout the project, but to be more specific, Kylie leads the data cleaning and software development, and Erin leads the document write-up and topic development.
+
+We divide the project into three phases: (1) research and discovery, (2) design, and (3) development.
+| Phase  | Task and Time Spent (in people-hours) |
+| ------------- | ------------- |
+| Research and Discovery | - Explore and select dataset of interest (1)<br/> - Define project scope (1)<br/> -   |
+| Content Cell  | Content Cell  |
 
 ## Success Story
 
