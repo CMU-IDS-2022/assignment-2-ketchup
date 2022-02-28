@@ -1,6 +1,6 @@
 # Do Couples Always Sleep Together?
 
-![A screenshot of your application. Could be a GIF.](Figs/screenshot.png)
+(Figs/screenshot.png)
 
 The project is inspired by a long-lasting question that many kids may have in their childhood: Why my parents don't sleep together?
 
