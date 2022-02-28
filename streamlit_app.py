@@ -11,8 +11,11 @@ image = Image.open('Figs/sleeping_together_or_not.png')
 st.image(image, caption='Photo by Somnox Sleep on Unsplash')
 
 st.subheader("Data")
-st.markdown("Source: [Sleeping alone data](https://github.com/fivethirtyeight/data/tree/master/sleeping-alone-data) by FiveThirtyEight")
 #@st.cache  # add caching so we load the data only once
+st.write("The data is collected by a survey conducted by FiveThirtyEight.\
+         The survey provides answers to several intriguing questions: How many couples sleep in separate beds?\
+         What kind of people don't sleep with their partner? Why don't they sleep together?\
+         We hope this web application offers you the opportunity to explore this interesting dataset and unfold the untold.")
 
 # ===================================== PART 0 =====================================
 # Read data
@@ -43,7 +46,10 @@ with st.expander("See cleaned data"):
     st.text("Data of couples who sleep separately:")
     st.write(separate_df)
 
-##==============================================function===============================================
+st.write("Source: [Sleeping alone data](https://github.com/fivethirtyeight/data/tree/master/sleeping-alone-data) by FiveThirtyEight")
+
+## ===================================== Functions =====================================
+
 def get_slice_membership(df, genders, age, income, occupation):
     """
     Implement a function that computes which rows of the given dataframe should
@@ -101,11 +107,16 @@ def make_long_reason_dataframe(df, reason_prefix):
 
 
 # MAIN CODE
+
+
 # ===================================== PART 1 =====================================
 # Basic information
 # Sleep together or not?
+
+st.markdown("---")
 st.header("Part 1: Sleep Together or Not?")
-st.write("We have 1079 valid responses. Let's look at how many couples actually sleep together every day.")
+st.write("Let's start off by looking at how many couples actually sleep together every day.")
+st.write("")
 
 demo_df['Sleep Together?'] = demo_df['Sleep Together?'].map({0: 'NO', 1:'YES'})
 sleep_together = alt.Chart(demo_df, title='Do you and your partner sleep together every day?').mark_bar(tooltip = True, size = 30).encode(
@@ -154,26 +165,15 @@ if group == 'Relationship Length':
      st.write(length_chart)
 else:
      st.write(status_chart)
-st.markdown("---")
 
-# freq_chart = alt.Chart(demo_df, title='Frequency in separate beds').mark_bar(tooltip = True).encode(
-#     x = alt.X('count()'),
-#     y = alt.Y('Frequency in separate beds', sort = ['Never', 'Once a year or less', 'Once a month or less', 'A few times per month', 'A few times per week', 'Every night']),
-#     color=alt.Color('Sleep Together?',
-#         scale=alt.Scale(
-#         domain=['YES', 'NO'],
-#         range=['pink', 'lightblue']))
-# ).properties(
-#     width = 600
-# )
-# st.write(freq_chart)
 
 
 # ===================================== PART 2 =====================================
 # Correlations between frequency of sleeping separately and demographics
 
-st.header("Part 2: Demographics Correlations")
-st.write("""The survey collected demographic data of the respondents, including age, gender, household income, and education level.
+st.markdown("---")
+st.header("Part 2: Demographics Distributions")
+st.write("""The survey collects demographic data of the respondents, including age, gender, household income, and education level.
          Demographic data is useful for researcher to understand human behavior, and it can be used in many ways to learn the generalities of a particular population.""")
 st.write("The demographic distributions can help us better understand the correlation between **demographics** and **whether the couple sleep together**.")
 
@@ -229,17 +229,6 @@ education_chart = alt.Chart(demo_df, title="Distribution of education level vs s
     width = 500
 )
 
-# location_chart = alt.Chart(demo_df).mark_bar(tooltip = True).encode(
-#     x = alt.X('count()'),
-#     y = alt.Y('Location', sort = '-x'),
-#     color=alt.Color('Sleep Together?',
-#             scale=alt.Scale(
-#             domain=['YES', 'NO'],
-#             range=['pink', 'lightblue']))
-# ).properties(
-#     width = 600
-# )
-
 # Drop down list for user to select demographic features
 demo_options = st.multiselect(
      '👇 Select one or more demographic factors you are interested in',
@@ -256,14 +245,19 @@ if 'Education' in demo_options:
 if 'Household Income' in demo_options:
     st.write(income_chart)
     st.markdown("---")
-#if 'Location' in demo_options:
-#    st.write(location_chart)
-    
+
+
 # ===================================== PART 3 =====================================
 # Drop down demographics and timespan of relationship selection + reasons (bar chart)
 # Select the reasons for sleeping in separate beds and show the correspondent demographics data
+
 st.markdown("---")
-st.header("Part 3: Why Couples Do Not Sleep Together?")
+st.header("Part 3: Why Do Couples Not Sleep Together?")
+st.write("After understanding the dataset and the basic demographics of the respondents, it's time to learn more about\
+         one of the most interesting part in this survey: the reason why people don't sleep with their partner.")
+st.write("You can select one or more demographics to filter a subset of respondents, and then look at the reasons why\
+         this group of people and their partners sleep in separate beds.")
+
 
 # Dropdown filters
 cols = st.columns(4)
@@ -279,29 +273,32 @@ with cols[3]:
 # Get the selected vavlues and reasons
 slice_labels = get_slice_membership(separate_df, genders, age, income, occupation)
 st.write("The sliced dataset contains {} elements ({:.1%} of total).".format(slice_labels.sum(), slice_labels.sum() / len(separate_df)))
-st.write("One respondent may select multiple reasons.")
+
 # Plot the bar chart for reasons
 if slice_labels.sum() < len(separate_df):
     sleep_separately_reasons = make_long_reason_dataframe(separate_df[slice_labels], 'Reason_')
-    st.write("The subgroup is selected based on the demographics of your interest.")
+    st.text("The subgroup is selected based on the demographics of your interest.")
     st.write("")
     reasons_chart = alt.Chart(sleep_separately_reasons, title="Why Couples Don't Sleep Together?").mark_bar().encode(
     x=alt.X('sum(agree)', axis=alt.Axis(title='Count of Respondents')),
     y=alt.Y('reason:O', axis=alt.Axis(title='')),
     color = alt.value('#AED6F1')).interactive()
     st.altair_chart(reasons_chart, use_container_width=True)
-st.markdown("""---""")
+    st.write("*Note*: One respondent may select multiple reasons.")
+
 
 # ===================================== PART 4 =====================================
 # Drop down reason selection + questions opinions (box plots)
 # Select the reasons for sleeping in separate beds and show the correspondent opinion
 
+st.markdown("---")
 st.header("Part 4: Is Sleeping Separately Better?")
 st.write("""In addition to investigating the reasons for sleeping separately,
          the survey also asked those who don't sleep with their partner for their opinions of the following three questions.""")
 st.markdown("- Sleeping in separate beds helps us to stay together")
 st.markdown("- We sleep better when we sleep in separate beds")
 st.markdown("- Our sex life has improved as a result of sleeping in separate beds")
+st.write("")
 
 separate_reasons =['Reason_One of us snores',
                 'Reason_One of us makes frequent bathroom trips in the night',
@@ -375,6 +372,7 @@ score_chart = alt.Chart(separate_df, title = 'Box plot for the responses of ' + 
     width=700, height = 200
 )
 st.write(score_chart)
+st.markdown("*Note:* `5` represents strongly agree and `1` represents strongly disagree.")
 
 
 # ===================================== PART 5 =====================================
@@ -394,17 +392,20 @@ selected = alt.selection_multi()
 place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar(tooltip=True).encode(
     alt.X('count()'),
     alt.Y(feature_option),
-    color = alt.value('#EBDEF0')
+    color = alt.value('#A2D9CE')
 ).properties(
     width = 600
 )
 st.write(place_chart)
 
-st.write('---')
+
 
 # ===================================== PART 6 =====================================
-st.header("Part 6: If Sleeping Separately, Where Does Each Of The Couple Sleep?")
-st.text("👇 Select the population demographic features that you want to see")
+
+st.write('---')
+st.header("Part 6: If Sleeping Separately, Where Does Each of the Couple Sleep?")
+st.write("👇 Select the population demographic features that you want to see")
+
 age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
 age_selected = alt.selection_single(
     fields = ['Age'],
@@ -432,7 +433,7 @@ income_selected = alt.selection_single(
 you_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
     alt.X('count()'),
     alt.Y('YouSleepAt', title = 'Respondent sleeping at'),
-    color = alt.value('#D6EAF8')
+    color = alt.value('#A2D9CE')
 ).add_selection(age_selected
 ).transform_filter(age_selected
 ).add_selection(edu_selected
@@ -442,7 +443,7 @@ you_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
 ).add_selection(income_selected
 ).transform_filter(income_selected
 ).properties(
-    width = 600
+    width = 600, height = 200
 )
 partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
     alt.X('count()'),
@@ -457,13 +458,15 @@ partner_sleep_at_chart = alt.Chart(separate_df).mark_bar(tooltip=True).encode(
 ).add_selection(income_selected
 ).transform_filter(income_selected
 ).properties(
-    width = 600
+    width = 600, height = 200
 )
 
 st.write(you_sleep_at_chart & partner_sleep_at_chart)
-st.write('---')
+
 
 # ===================================== PART 7 =====================================
+
+st.write('---')
 st.header("Part 7: Person Sampling")
 
 st.write("""
@@ -493,4 +496,3 @@ This person is a **{person.Gender.lower()}**, his/her job is **{person.Occupatio
 
 st.markdown("---")
 st.markdown("This project was created by Erin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
-
