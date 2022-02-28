@@ -11,12 +11,14 @@ FiveThirtyEight published an article [*Dear Mona, How Many Couples Sleep in Sepa
 
 As discussed previously, we hope to use this dataset to answer why couples do not sleep together. This well-known but barely discussed question extends the discussion to the broader social psychology area. We utilized the demographic data collected in the survey, such as `age`, `gender`, `household income`, `occupation`, to excavate the insights behind it - are people with specific demographics associated with a higher possibility for sleeping separately with their partner?
 
-Our web application enables users to first look at the dataset, understanding what was in the survey and the basic demographics of the respondents. With that knowledge in mind, we develop various topics stemming from the study and allow users to explore them based on their interests. As an example, one section enables users to see the correlation between demographics of those who sleep separately with their partner and the frequency of sleeping separately.
+Our web application enables users to begin by looking at the dataset, understanding what was in the survey and the basic demographics of the respondents. With that knowledge in mind, we display various topics stemming from the study and allow users to explore them based on their interests. As an example, one section enables users to see the correlation between demographics of those who sleep separately with their partner and the frequency of sleeping separately.
 
 
 ## Design
 
-TODO: **A rationale for your design decisions.** How did you choose your particular visual encodings and interaction techniques? What alternatives did you consider and how did you arrive at your ultimate choices?
+A large proportion of our application and interactive visualizations is composed of **Select** and **Filter** techniques. We chose these two techniques as the primary interaction between users and charts based on the core questions we wanted to enable the users to answer. Additionally, we wanted to allow users to select demographics of their interests because we don't have a target audience with specific demographics. They can be any gender, at any age, or with any household income range. It is valuable that users can look at the conditional result by selecting their own or interested demographics.
+
+A significant challenge for chart variety is that none of the variables in this survey data is quantitative, even the demographics such as age and household income being designed as categorical. That is to say, our choices of chart types are very limited. To make up for this weakness, we transformed some of the nominal variables to numeric. For example, we converted the `opinion of s specific question` from the scale of strongly disagree to strongly agree to the scale of 1 to 5; we can then present the data in a numeric format like average value or a box chart.
 
 
 ## Development
@@ -30,7 +32,7 @@ We divide the project into three phases: (1) research and discovery, (2) design,
 | Design  | ・High-level design (questions, topics, contents, etc.) (2)<br/> ・Visualization design (chart type, layout, color theme)(3)| 5 |
 | Development  | ・Environment setup (0.5)<br/> - Data cleaning (3)<br/> ・Visualization development (15)<br/> - Testing (2)<br/> - Document write-up (2)| 22.5 |
 
-It was pretty smooth when choosing the dataset and topic as a team. It didn't take much time for us to conduct the high-level design either because we both agreed this is an interesting dataset, and our questions derived from the data were similar. In contrast, we spent relatively more time thinking about the visualization design. Because this is survey data, there are actually not too many choices for visualizations but bar charts. We decided to try to incorporate more different interactivity techniques to make up for the potential monotonous chart variety.
+It was pretty smooth when choosing the dataset and topic as a team. It didn't take much time for us to conduct the high-level design either because we both agreed this is an interesting dataset, and our questions derived from the data were similar. In contrast, we spent relatively more time thinking about the visualization design. Because this is survey data, there are actually not too many choices for visualizations but bar charts. We decided to try to incorporate more different interaction techniques to make up for the potential monotonous chart variety.
 
 
 ## Success Story
