@@ -402,11 +402,10 @@ st.markdown("*Note:* `5` represents strongly agree and `1` represents strongly d
 
 
 # ===================================== PART 6 =====================================
-
 st.write('---')
 st.header("Part 6: If Sleeping Separately, Where Does Each of the Couple Sleep?")
 st.write("""What's more, we also wanted to see where do couples respectively sleep at when they are not sleeping together. 
-            Will the sleeping place be different based on their gender, age, income, and occupation.""")
+            Will the sleeping place be different based on their gender, age, income, and occupation?""")
 st.write("👇 Select the population demographic features that you want to see")
 
 age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
@@ -468,7 +467,6 @@ st.write(you_sleep_at_chart & partner_sleep_at_chart)
 
 
 # ===================================== PART 7 =====================================
-
 st.write('---')
 st.header("Part 7: Person Sampling")
 st.write("""👩‍❤️‍👨 Select a random person from the data set, and see his/her characteristics""")
