@@ -262,7 +262,8 @@ feature_option = st.selectbox(
     ['Age', 'Gender', 'Education', 'Household income']
 )
 selected = alt.selection_multi()
-place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option], title = freq_option).mark_bar(tooltip=True).encode(
+place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option], title = 'Sleeping separately '+ freq_option.lower()
+).mark_bar(tooltip=True).encode(
     alt.X('count()'),
     alt.Y(feature_option),
     color = alt.value('#A2D9CE')
