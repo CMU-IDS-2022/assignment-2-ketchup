@@ -262,7 +262,7 @@ feature_option = st.selectbox(
     ['Age', 'Gender', 'Education', 'Household income']
 )
 selected = alt.selection_multi()
-place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option]).mark_bar(tooltip=True).encode(
+place_chart = alt.Chart(separate_df[separate_df['Frequency in separate beds'] == freq_option], title = freq_option).mark_bar(tooltip=True).encode(
     alt.X('count()'),
     alt.Y(feature_option),
     color = alt.value('#A2D9CE')
@@ -389,7 +389,7 @@ with col2:
 separate_df['Reason_'+reason_option+'_Y/N'] = separate_df['Reason_'+reason_option].map({0: 'NO', 1: 'YES'})
 score_chart = alt.Chart(separate_df, title = 'Box plot for the responses of ' + question_option.lower()).mark_boxplot(size = 50
 ).encode(
-    alt.X(question_option+'_code', title = 'Larger the score, higher the level of agreement'),
+    alt.X(question_option+'_code', title = 'Level of agreement'),
     alt.Y('Reason_'+reason_option+'_Y/N', title = None),
     alt.Color('Reason_'+reason_option+'_Y/N', legend = None, 
                 scale = alt.Scale(domain = ['YES', 'NO'], range=['#FAD7A0', '#A2D9CE']))
@@ -404,6 +404,8 @@ st.markdown("*Note:* `5` represents strongly agree and `1` represents strongly d
 
 st.write('---')
 st.header("Part 6: If Sleeping Separately, Where Does Each of the Couple Sleep?")
+st.write("""What's more, we also wanted to see where do couples respectively sleep at when they are not sleeping together. 
+            Will the sleeping place be different based on their gender, age, income, and occupation.""")
 st.write("👇 Select the population demographic features that you want to see")
 
 age_dropdown = alt.binding_select(options = separate_df['Age'].unique())
@@ -468,9 +470,7 @@ st.write(you_sleep_at_chart & partner_sleep_at_chart)
 
 st.write('---')
 st.header("Part 7: Person Sampling")
-
-st.write("""
-Select a random person from the data, and see his/her characteristics""")
+st.write("""👩‍❤️‍👨 Select a random person from the data set, and see his/her characteristics""")
 
 sleep_separate = st.checkbox("Sample a person who sometimes sleeps separately with his/her partner")
 
