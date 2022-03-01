@@ -39,8 +39,6 @@ It was pretty smooth when choosing the dataset and topic as a team. It didn't ta
 
 ## Success Story
 
-TODO:  **A success story of your project.** Describe an insight or discovery you gain with your application that relates to the goals of your project.
-
 As a person whose parents sleep separately, this application helps me answer this difficult question since childhood, even in greater detail. When I was a child, 
 
 According to the survey, of the 483 who do not sleep with their partner, about 45% said it's because one of them `snores`, and 26% responded `sickness`. Other reasons include `different sleeping times`, `frequent bathroom trips in the night`, `children`, `different temperature preferences`, most of which are related to bedroom behaviors or living habits. In contrast, only 15% and 6.6% reported `argument or fight` and `no longer physically intimate`. We observed that, in essence, a majority of the reasons that drive couples to sleep in separate beds are related to bedroom behaviors or living habits and not necessarily related to their emotional relationship. 
