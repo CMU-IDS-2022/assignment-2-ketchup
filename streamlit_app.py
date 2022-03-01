@@ -495,3 +495,4 @@ This person is a **{person.Gender.lower()}**, his/her job is **{person.Occupatio
 
 st.markdown("---")
 st.markdown("This project was created by Erin Lin and Kylie Hsieh for the [Interactive Data Science](https://dig.cmu.edu/ids2022) course at [Carnegie Mellon University](https://www.cmu.edu).")
+st.markdown("Please find the write-up and source code in the [Github repository](https://github.com/CMU-IDS-2022/assignment-2-ketchup)")
